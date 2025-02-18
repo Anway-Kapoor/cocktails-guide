@@ -1,4 +1,16 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
-
-export default nextConfig;
+export default {
+    async headers() {
+      return [
+        {
+          source: "/(.*)",
+          headers: [
+            {
+              key: "Content-Security-Policy",
+              value: "frame-src 'self' https://www.youtube.com; object-src 'none';",
+            },
+          ],
+        },
+      ];
+    },
+  };
+  
