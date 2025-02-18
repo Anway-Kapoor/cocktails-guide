@@ -15,6 +15,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full bg-[#0F172A] bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-12">
+      <h2 className="text-xl text-center">In development. More features coming soon!</h2>
       <div className="max-w-7xl mx-auto">
         <h1 className="text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-400 to-indigo-400 text-center mb-12 leading-tight">
           The Tipsy Guide
