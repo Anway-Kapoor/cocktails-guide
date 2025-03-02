@@ -1,4 +1,4 @@
-import { fetchApi } from "./api";
+import fetchApi from "./api";
 
 export async function searchCocktails(query) {
   const data = await fetchApi('search', query);

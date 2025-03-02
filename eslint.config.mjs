@@ -7,8 +7,10 @@ const __dirname = dirname(__filename);
 
 const compat = new FlatCompat({
   baseDirectory: __dirname,
+  recommendedConfig: { extends: ["eslint:recommended"] },
 });
 
-const eslintConfig = [...compat.extends("next/core-web-vitals")];
-
-export default eslintConfig;
+// Use a simpler configuration that won't have serialization issues
+export default [
+  ...compat.extends("next/core-web-vitals"),
+];

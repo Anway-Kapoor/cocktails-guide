@@ -5,7 +5,7 @@ const BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1";
 export async function GET(request) {
   const { searchParams } = new URL(request.url);
   const action = searchParams.get('action');
-  const query = searchParams.get('query') || '';
+  const query = searchParams.get('query');
   
   if (!action) {
     return NextResponse.json({ error: 'Action parameter is required' }, { status: 400 });

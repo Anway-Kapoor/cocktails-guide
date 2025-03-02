@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import CocktailGrid from "@/components/CocktailGrid";
 import SearchBar from "@/components/SearchBar";
@@ -8,7 +8,8 @@ import AlphabetPagination from "@/components/AlphabetPagination";
 import Pagination from "@/components/Pagination";
 import { searchCocktails, getCocktailsByLetter } from "@/services/cocktailService";
 
-export default function Home() {
+// Create a wrapper component that uses searchParams
+function HomeContent() {
   const searchParams = useSearchParams();
   const urlSearchQuery = searchParams.get('search');
   
@@ -31,6 +32,15 @@ export default function Home() {
     return cocktails.slice(startIndex, endIndex);
   };
   
+  
+  // Handle letter selection
+  const handleLetterSelect = (letter) => {
+    // Update the current letter immediately for visual feedback
+    setCurrentLetter(letter);
+    // Then load the cocktails
+    loadCocktailsByLetter(letter);
+  };
+  
   // Load cocktails by letter
   const loadCocktailsByLetter = async (letter) => {
     setLoading(true);
@@ -38,7 +48,8 @@ export default function Home() {
       const results = await getCocktailsByLetter(letter);
       setCocktails(results || []);
       setCurrentPage(1);
-      setCurrentLetter(letter);
+      // Remove this line since we're already setting it in handleLetterSelect
+      // setCurrentLetter(letter);
       setIsSearchMode(false);
       setSearchQuery('');
     } catch (error) {
@@ -47,11 +58,6 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
-  };
-  
-  // Handle letter selection
-  const handleLetterSelect = (letter) => {
-    loadCocktailsByLetter(letter);
   };
   
   // Handle page change
@@ -166,5 +172,18 @@ export default function Home() {
         }
       `}</style>
     </div>
+  );
+}
+
+// Main component with Suspense boundary
+export default function Home() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen w-full bg-[#0F172A] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-400"></div>
+      </div>
+    }>
+      <HomeContent />
+    </Suspense>
   );
 }
