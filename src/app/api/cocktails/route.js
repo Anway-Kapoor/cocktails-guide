@@ -15,16 +15,19 @@ export async function GET(request) {
   
   switch (action) {
     case 'search':
-      endpoint = `/search.php?s=${query}`;
+      endpoint = `/search.php?s=${encodeURIComponent(query || '')}`;
       break;
     case 'letter':
-      endpoint = `/search.php?f=${query}`;
+      endpoint = `/search.php?f=${encodeURIComponent(query || '')}`;
       break;
     case 'id':
-      endpoint = `/lookup.php?i=${query}`;
+      endpoint = `/lookup.php?i=${encodeURIComponent(query || '')}`;
       break;
     case 'random':
       endpoint = '/random.php';
+      break;
+    case 'ingredient':
+      endpoint = `/filter.php?i=${encodeURIComponent(query || '')}`;
       break;
     default:
       return NextResponse.json({ error: 'Invalid action' }, { status: 400 });

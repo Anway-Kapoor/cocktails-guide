@@ -34,25 +34,25 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   };
   
   return (
-    <div className="flex justify-center mt-8 mb-12">
-      <div className="flex items-center space-x-2">
+    <div className="flex justify-center mt-6 md:mt-8 mb-8 md:mb-12">
+      <div className="flex items-center space-x-1 md:space-x-2">
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`px-4 py-2 rounded-lg ${
+          className={`px-2 py-1 md:px-4 md:py-2 text-sm md:text-base rounded-lg ${
             currentPage === 1
               ? 'bg-white/5 text-white/40 cursor-not-allowed'
               : 'bg-white/10 hover:bg-white/20 text-white/80 hover:text-white'
           }`}
         >
-          Previous
+          Prev
         </button>
         
         {getVisiblePageNumbers().map((page, index) => (
           <button
             key={index}
             onClick={() => typeof page === 'number' && onPageChange(page)}
-            className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+            className={`w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center ${
               page === currentPage
                 ? 'bg-gradient-to-r from-rose-400 to-indigo-400 text-white font-bold'
                 : page === '...'
@@ -67,7 +67,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`px-4 py-2 rounded-lg ${
+          className={`px-2 py-1 md:px-4 md:py-2 text-sm md:text-base rounded-lg ${
             currentPage === totalPages
               ? 'bg-white/5 text-white/40 cursor-not-allowed'
               : 'bg-white/10 hover:bg-white/20 text-white/80 hover:text-white'

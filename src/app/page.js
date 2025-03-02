@@ -97,9 +97,9 @@ function HomeContent() {
   }, [urlSearchQuery]); 
   
   return (
-    <div className="min-h-screen w-full bg-[#0F172A] bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] px-4 py-12">
+    <div className="min-h-screen w-full bg-[#0F172A] bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] px-3 sm:px-4 py-8 sm:py-12">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-400 to-indigo-400 text-center mb-12 leading-tight">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-400 to-indigo-400 text-center mb-8 md:mb-12 leading-tight">
         Cocktail Hive
         </h1>
         
