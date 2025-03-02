@@ -2,11 +2,13 @@ import CocktailDetails from '@/components/CocktailDetails';
 import { getCocktailById } from '@/services/cocktailService';
 
 export default async function CocktailPage({ params }) {
-
   try {
+    // Convert params to a Promise and await it before accessing properties
+    const resolvedParams = await Promise.resolve(params);
+    
     // Ensure we have a valid ID before proceeding
-    if (!params || typeof params.id === 'undefined') {
-      console.error("Invalid params object:", params);
+    if (!resolvedParams || typeof resolvedParams.id === 'undefined') {
+      console.error("Invalid params object:", resolvedParams);
       return (
         <div className="min-h-screen flex items-center justify-center bg-[#0F172A]">
           <h1 className="text-2xl font-bold text-white">Invalid Cocktail ID</h1>
@@ -14,6 +16,9 @@ export default async function CocktailPage({ params }) {
       );
     }
     
+    // Get the ID and fetch the cocktail
+    const id = String(resolvedParams.id).trim();
+    const cocktail = await getCocktailById(id);
 
     if (!cocktail) {
       return (
@@ -33,7 +38,6 @@ export default async function CocktailPage({ params }) {
     );
   }
 }
-
 
 export async function generateMetadata({ params }) {
   try {
