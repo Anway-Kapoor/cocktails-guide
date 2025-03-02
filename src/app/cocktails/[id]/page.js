@@ -2,28 +2,52 @@ import CocktailDetails from '@/components/CocktailDetails';
 import { getCocktailById } from '@/services/cocktailService';
 
 export default async function CocktailPage({ params }) {
-  const cocktail = await getCocktailById(params.id);
 
-  if (!cocktail) {
+  try {
+    // Ensure we have a valid ID before proceeding
+    if (!params || typeof params.id === 'undefined') {
+      console.error("Invalid params object:", params);
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-[#0F172A]">
+          <h1 className="text-2xl font-bold text-white">Invalid Cocktail ID</h1>
+        </div>
+      );
+    }
+    
+
+    if (!cocktail) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-[#0F172A]">
+          <h1 className="text-2xl font-bold text-white">Cocktail Not Found</h1>
+        </div>
+      );
+    }
+
+    return <CocktailDetails cocktail={cocktail} />;
+  } catch (error) {
+    console.error("Error in CocktailPage:", error);
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#0F172A]">
-        <h1 className="text-2xl font-bold text-white">Cocktail Not Found</h1>
+        <h1 className="text-2xl font-bold text-white">Error Loading Cocktail</h1>
       </div>
     );
   }
-
-  return (
-        <CocktailDetails cocktail={cocktail} />
-  );
 }
+
 
 export async function generateMetadata({ params }) {
   try {
-    if (!params?.id) {
+    // Convert params to a Promise and await it before accessing properties
+    const resolvedParams = await Promise.resolve(params);
+    
+    if (!resolvedParams || typeof resolvedParams.id === 'undefined') {
       return { title: "Invalid Cocktail ID" };
     }
 
-    const cocktail = await getCocktailById(params.id);
+    const id = String(resolvedParams.id).trim();
+    console.log("Generating metadata for cocktail ID:", id);
+    
+    const cocktail = await getCocktailById(id);
 
     return {
       title: cocktail ? `${cocktail.strDrink} - Cocktail Explorer` : "Cocktail Not Found",

@@ -4,7 +4,11 @@ export default async function fetchApi(action, query = '') {
     // This ensures we have a complete URL with protocol and host
     const baseUrl = typeof window !== 'undefined' 
       ? window.location.origin 
-      : 'http://localhost:3000';
+      : process.env.VERCEL_URL 
+        ? `https://${process.env.VERCEL_URL}`
+        : 'http://localhost:3000';
+    
+    console.log("Using base URL:", baseUrl);
     
     // Create the API endpoint path
     const apiUrl = `${baseUrl}/api/cocktails?action=${encodeURIComponent(action)}`;
@@ -14,9 +18,15 @@ export default async function fetchApi(action, query = '') {
       ? `${apiUrl}&query=${encodeURIComponent(query)}`
       : apiUrl;
     
-    const response = await fetch(urlWithQuery);
+    console.log("Fetching from:", urlWithQuery);
+    
+    const response = await fetch(urlWithQuery, {
+      // Add cache: 'no-store' to prevent caching issues
+      cache: 'no-store'
+    });
     
     if (!response.ok) {
+      console.error(`API error: ${response.status} ${response.statusText}`);
       throw new Error(`API call failed: ${response.statusText}`);
     }
     
