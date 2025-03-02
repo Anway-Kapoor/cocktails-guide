@@ -94,7 +94,7 @@ export default function CocktailDetails({ cocktail }) {
             <div className="flex flex-wrap gap-2 sm:gap-4 justify-center lg:justify-start">
               {cocktail.strCategory && (
                 <div className="glass-badge">
-                  <span className="text-xs text-rose-400">Category</span>
+                  <span className="text-xs text-rose-500">Category</span>
                   <span className="text-white font-medium text-sm sm:text-base">
                     {cocktail.strCategory}
                   </span>
