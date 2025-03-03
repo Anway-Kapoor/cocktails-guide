@@ -7,7 +7,7 @@ const nextConfig = {
         headers: [
           {
             key: "Content-Security-Policy",
-            value: "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://*.youtu.be; connect-src 'self' https://www.thecocktaildb.com https://www.youtube.com https://www.googleapis.com; img-src 'self' data: https://* http://*; object-src 'none';",
+            value: "frame-src 'self' https://www.youtube.com https://www.youtube-nocookie.com https://*.youtu.be; connect-src 'self' https://www.thecocktaildb.com/api/* https://www.youtube.com https://www.googleapis.com; img-src 'self' data: https://* http://*; object-src 'none';",
           },
           {
             key: "Permissions-Policy",
