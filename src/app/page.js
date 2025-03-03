@@ -96,14 +96,15 @@ function HomeContent() {
     }
   }, [urlSearchQuery]); 
   
+  // Improve mobile layout with better spacing and responsive elements
   return (
-    <div className="min-h-screen w-full bg-[#0F172A] bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] px-3 sm:px-4 py-8 sm:py-12">
+    <div className="min-h-screen w-full bg-[#0F172A] bg-gradient-to-br from-[#0F172A] via-[#1E293B] to-[#0F172A] px-3 sm:px-4 py-6 sm:py-12">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-400 to-indigo-400 text-center mb-8 md:mb-12 leading-tight">
-        Cocktail Hive
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-rose-400 via-fuchsia-400 to-indigo-400 text-center mb-6 md:mb-12 leading-tight">
+          Cocktail Hive
         </h1>
         
-        <div className="mb-8">
+        <div className="mb-6 sm:mb-8">
           <SearchBar onSearch={handleSearch} />
         </div>
         
@@ -115,12 +116,12 @@ function HomeContent() {
         )}
         
         {isSearchMode && (
-          <div className="mb-8 text-center">
-            <p className="text-white/80">
+          <div className="mb-6 sm:mb-8 text-center">
+            <p className="text-white/80 text-sm sm:text-base">
               Showing results for &ldquo;{searchQuery}&rdquo;
               <button 
                 onClick={() => loadCocktailsByLetter(currentLetter)}
-                className="ml-4 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-sm"
+                className="ml-2 sm:ml-4 px-2 sm:px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg text-xs sm:text-sm"
               >
                 Back to Browse
               </button>
@@ -129,8 +130,8 @@ function HomeContent() {
         )}
         
         {loading ? (
-          <div className="flex justify-center items-center py-20">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-rose-400"></div>
+          <div className="flex justify-center items-center py-12 sm:py-20">
+            <div className="animate-spin rounded-full h-10 w-10 sm:h-12 sm:w-12 border-t-2 border-b-2 border-rose-400"></div>
           </div>
         ) : cocktails && cocktails.length > 0 ? (
           <>
@@ -148,20 +149,22 @@ function HomeContent() {
             )}
           </>
         ) : (
-          <div className="text-center py-20">
-            {/* <p className="text-white/80 text-xl">No cocktails found.</p> */}
+          <div className="text-center py-12 sm:py-20">
             {isSearchMode && (
-              <button 
-                onClick={() => loadCocktailsByLetter(currentLetter)}
-                className="mt-4 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg"
-              >
-                Back to Browse
-              </button>
+              <>
+                <p className="text-white/80 text-lg mb-4">No cocktails found</p>
+                <button 
+                  onClick={() => loadCocktailsByLetter(currentLetter)}
+                  className="px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-sm"
+                >
+                  Back to Browse
+                </button>
+              </>
             )}
           </div>
         )}
       </div>
-
+  
       <style jsx>{`
         .glass-panel {
           backdrop-filter: blur(12px);

@@ -1,6 +1,6 @@
 export default async function fetchApi(action, query = '') {
   try {
-    // Use the Next.js API route as a proxy instead of direct API calls
+    
     const baseUrl = typeof window !== 'undefined' 
       ? window.location.origin 
       : process.env.NEXT_PUBLIC_SITE_URL 
@@ -9,10 +9,8 @@ export default async function fetchApi(action, query = '') {
           ? `https://${process.env.VERCEL_URL}`
           : 'http://localhost:3000';
     
-    // Create the API endpoint path to our Next.js API route
     const apiUrl = `${baseUrl}/api/cocktails?action=${encodeURIComponent(action)}`;
     
-    // Add query parameter if it exists
     const urlWithQuery = query 
       ? `${apiUrl}&query=${encodeURIComponent(query)}`
       : apiUrl;

@@ -25,21 +25,9 @@ export async function getCocktailById(id) {
   
   try {
     const stringId = String(id).trim();
-    console.log("Fetching cocktail with ID:", stringId); // Add logging
     
     const data = await fetchApi('id', stringId);
-    
-    if (!data || !data.drinks) {
-      console.log("No drinks data returned from API for ID:", stringId);
-      return null;
-    }
-    
     const drink = data.drinks[0];
-    
-    if (!drink) {
-      console.log("No drink found in API response for ID:", stringId);
-      return null;
-    }
 
     const ingredients = [];
     for (let i = 1; i <= 15; i++) {

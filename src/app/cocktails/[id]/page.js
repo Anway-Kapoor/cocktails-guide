@@ -3,10 +3,9 @@ import { getCocktailById } from '@/services/cocktailService';
 
 export default async function CocktailPage({ params }) {
   try {
-    // Convert params to a Promise and await it before accessing properties
+    
     const resolvedParams = await Promise.resolve(params);
     
-    // Ensure we have a valid ID before proceeding
     if (!resolvedParams || typeof resolvedParams.id === 'undefined') {
       console.error("Invalid params object:", resolvedParams);
       return (
@@ -16,7 +15,7 @@ export default async function CocktailPage({ params }) {
       );
     }
     
-    // Get the ID and fetch the cocktail
+  
     const id = String(resolvedParams.id).trim();
     const cocktail = await getCocktailById(id);
 
