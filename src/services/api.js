@@ -1,35 +1,25 @@
 export default async function fetchApi(action, query = '') {
   try {
-    // Use the CocktailDB API directly
-    const BASE_URL = "https://www.thecocktaildb.com/api/json/v1/1";
+    // Use the Next.js API route as a proxy instead of direct API calls
+    const baseUrl = typeof window !== 'undefined' 
+      ? window.location.origin 
+      : process.env.NEXT_PUBLIC_SITE_URL 
+        ? process.env.NEXT_PUBLIC_SITE_URL
+        : process.env.VERCEL_URL 
+          ? `https://${process.env.VERCEL_URL}`
+          : 'http://localhost:3000';
     
-    // Determine the endpoint based on the action
-    let endpoint = '';
+    // Create the API endpoint path to our Next.js API route
+    const apiUrl = `${baseUrl}/api/cocktails?action=${encodeURIComponent(action)}`;
     
-    switch (action) {
-      case 'search':
-        endpoint = `/search.php?s=${encodeURIComponent(query || '')}`;
-        break;
-      case 'letter':
-        endpoint = `/search.php?f=${encodeURIComponent(query || '')}`;
-        break;
-      case 'id':
-        endpoint = `/lookup.php?i=${encodeURIComponent(query || '')}`;
-        break;
-      case 'random':
-        endpoint = '/random.php';
-        break;
-      case 'ingredient':
-        endpoint = `/filter.php?i=${encodeURIComponent(query || '')}`;
-        break;
-      default:
-        throw new Error('Invalid action');
-    }
+    // Add query parameter if it exists
+    const urlWithQuery = query 
+      ? `${apiUrl}&query=${encodeURIComponent(query)}`
+      : apiUrl;
     
-    const apiUrl = `${BASE_URL}${endpoint}`;
-    console.log("Fetching from:", apiUrl);
+    console.log("Fetching from:", urlWithQuery);
     
-    const response = await fetch(apiUrl, {
+    const response = await fetch(urlWithQuery, {
       cache: 'no-store',
     });
     
