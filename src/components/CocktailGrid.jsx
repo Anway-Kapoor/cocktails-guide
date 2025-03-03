@@ -1,7 +1,7 @@
 import CocktailCard from "./CocktailCard";
 
 export default function CocktailGrid({ cocktails, searchQuery = "" }) {
-  // Check if cocktails is null/undefined or not an array
+
   if (!cocktails || !Array.isArray(cocktails) || cocktails.length === 0) {
     return <p className="text-center text-gray-500">No cocktails found.</p>;
   }
