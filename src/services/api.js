@@ -1,14 +1,29 @@
 export default async function fetchApi(action, query = '') {
   try {
-    // Build the URL to your Next.js API route with proper origin
-    // This ensures we have a complete URL with protocol and host
-    const baseUrl = typeof window !== 'undefined' 
-      ? window.location.origin 
-      : process.env.VERCEL_URL 
-        ? `https://${process.env.VERCEL_URL}`
-        : 'http://localhost:3000';
+    // Improved base URL determination for both development and production
+    let baseUrl;
+    
+    if (typeof window !== 'undefined') {
+      // Browser environment - use the current origin
+      baseUrl = window.location.origin;
+    } else {
+      // Server environment - determine from environment variables
+      // Check for various Vercel environment variables
+      if (process.env.VERCEL_URL) {
+        baseUrl = `https://${process.env.VERCEL_URL}`;
+      } else if (process.env.NEXT_PUBLIC_VERCEL_URL) {
+        baseUrl = `https://${process.env.NEXT_PUBLIC_VERCEL_URL}`;
+      } else if (process.env.NEXT_PUBLIC_SITE_URL) {
+        // Custom environment variable you can set in your project
+        baseUrl = process.env.NEXT_PUBLIC_SITE_URL;
+      } else {
+        // Fallback for local development
+        baseUrl = 'http://localhost:3000';
+      }
+    }
     
     console.log("Using base URL:", baseUrl);
+    console.log("Action:", action, "Query:", query);
     
     // Create the API endpoint path
     const apiUrl = `${baseUrl}/api/cocktails?action=${encodeURIComponent(action)}`;
@@ -21,8 +36,11 @@ export default async function fetchApi(action, query = '') {
     console.log("Fetching from:", urlWithQuery);
     
     const response = await fetch(urlWithQuery, {
-      // Add cache: 'no-store' to prevent caching issues
-      cache: 'no-store'
+      // Use no-store to prevent caching issues
+      cache: 'no-store',
+      headers: {
+        'Content-Type': 'application/json'
+      }
     });
     
     if (!response.ok) {
@@ -30,7 +48,10 @@ export default async function fetchApi(action, query = '') {
       throw new Error(`API call failed: ${response.statusText}`);
     }
     
-    return response.json();
+    const data = await response.json();
+    console.log("API response received:", data ? "Data received" : "No data");
+    
+    return data;
   } catch (error) {
     console.error('Error in fetchApi:', error);
     throw error;

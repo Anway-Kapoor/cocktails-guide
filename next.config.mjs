@@ -13,6 +13,11 @@ const nextConfig = {
             key: "Permissions-Policy",
             value: "camera=(), microphone=(), geolocation=()",
           },
+          // Add a separate header for FLoC/Privacy Sandbox opt-out
+          {
+            key: "Permissions-Policy",
+            value: "browsing-topics=()",
+          },
         ],
       },
     ];
