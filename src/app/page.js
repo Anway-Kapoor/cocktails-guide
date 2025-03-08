@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import CocktailGrid from "@/components/CocktailGrid";
 import SearchBar from "@/components/SearchBar";
 import AlphabetPagination from "@/components/AlphabetPagination";
@@ -12,6 +12,8 @@ import { searchCocktails, getCocktailsByLetter } from "@/services/cocktailServic
 function HomeContent() {
   const searchParams = useSearchParams();
   const urlSearchQuery = searchParams.get('search');
+
+  const router = useRouter()
   
   // Remove isNavigatingBack state and related useEffect
   const [cocktails, setCocktails] = useState([]);
@@ -36,13 +38,21 @@ function HomeContent() {
   
   // Handle letter selection
   const handleLetterSelect = (letter) => {
+    // Clear search params from URL when switching to letter navigation
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete('search'); // Remove search parameter
+    params.set('letter', letter);
+    
+    // Update URL without refreshing the page
+    router.push(`/?${params.toString()}`, { scroll: false });
+    
     // Update the current letter immediately for visual feedback
     setCurrentLetter(letter);
     // Then load the cocktails
     loadCocktailsByLetter(letter);
   };
   
-  // Load cocktails by letter
+  // In loadCocktailsByLetter function
   const loadCocktailsByLetter = async (letter) => {
     setLoading(true);
     try {
@@ -51,6 +61,8 @@ function HomeContent() {
       setCurrentPage(1);
       setIsSearchMode(false);
       setSearchQuery('');
+      // Clear the last search from localStorage
+      localStorage.removeItem('lastSearch');
     } catch (error) {
       console.error("Error loading cocktails by letter:", error);
       setCocktails([]);
