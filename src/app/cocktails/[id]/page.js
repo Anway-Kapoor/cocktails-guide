@@ -48,7 +48,6 @@ export async function generateMetadata({ params }) {
     }
 
     const id = String(resolvedParams.id).trim();
-    console.log("Generating metadata for cocktail ID:", id);
     
     const cocktail = await getCocktailById(id);
 

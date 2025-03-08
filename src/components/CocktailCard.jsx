@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function CocktailCard({ cocktail, searchQuery = "" }) {
+  const searchParams = useSearchParams();
+  const letterParam = searchParams.get('letter');
+  
   // Ensure the ID is valid
   const cocktailId = cocktail?.idDrink ? String(cocktail.idDrink).trim() : '';
   
-  // Create URL with search query parameter if it exists
-  const detailsUrl = searchQuery 
-    ? `/cocktails/${cocktailId}?from=search&q=${encodeURIComponent(searchQuery)}`
-    : `/cocktails/${cocktailId}`;
+  let detailsUrl = `/cocktails/${cocktailId}`;
+  
+  if (searchQuery) {
+    detailsUrl += `?from=search&search=${encodeURIComponent(searchQuery)}`;
+  } else if (letterParam) {
+    detailsUrl += `?from=letter&letter=${letterParam}`;
+  }
   
   return (
     <div className="group">

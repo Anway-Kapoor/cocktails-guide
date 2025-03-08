@@ -9,33 +9,41 @@ export default function CocktailDetails({ cocktail }) {
   const searchParams = useSearchParams();
   
   const fromSearch = searchParams.get('from') === 'search';
-  const searchQuery = searchParams.get('q') || '';
+  const fromLetter = searchParams.get('from') === 'letter';
+  // Use 'search' instead of 'q' to match the parameter in the home page
+  const searchQuery = searchParams.get('search') || '';
+  const letterParam = searchParams.get('letter') || '';
   
-  // Store search state in localStorage when component mounts
+  // Store search/letter state when component mounts
   useEffect(() => {
     if (fromSearch && searchQuery) {
       localStorage.setItem('lastSearch', searchQuery);
     }
-  }, [fromSearch, searchQuery]);
-  
+    if (fromLetter && letterParam) {
+      localStorage.setItem('lastLetter', letterParam);
+    }
+  }, [fromSearch, searchQuery, fromLetter, letterParam]);
   const handleGoBack = () => {
-    // Try to use browser's back functionality first
-    if (window.history.length > 1) {
-      router.back();
+    if (fromSearch && searchQuery) {
+      router.push(`/?search=${encodeURIComponent(searchQuery)}`);
+    } else if (fromLetter && letterParam) {
+      router.push(`/?letter=${letterParam}`);
     } else {
-      // If no history, check if we have a search query to return to
+      // Check localStorage for previous state
       const lastSearch = localStorage.getItem('lastSearch');
-      if (fromSearch && searchQuery) {
-        router.push(`/?search=${encodeURIComponent(searchQuery)}`);
-      } else if (lastSearch) {
+      const lastLetter = localStorage.getItem('lastLetter');
+      
+      if (lastSearch) {
         router.push(`/?search=${encodeURIComponent(lastSearch)}`);
+      } else if (lastLetter) {
+        router.push(`/?letter=${lastLetter}`);
       } else {
         // Default fallback to home
         router.push('/');
       }
     }
   };
-
+  
   if (!cocktail) {
     return (
       <div className="min-h-screen w-full bg-[#0F172A] flex items-center justify-center">
@@ -62,7 +70,9 @@ export default function CocktailDetails({ cocktail }) {
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M19 12H5M12 19l-7-7 7-7"/>
           </svg>
-          {fromSearch ? `Back to "${searchQuery}" results` : "Back"}
+          {fromSearch ? `Back to "${searchQuery}" results` : 
+           fromLetter ? `Back to "${letterParam.toUpperCase()}" cocktails` : 
+           "Back"}
         </button>
         
         {/* Rest of your component remains the same */}

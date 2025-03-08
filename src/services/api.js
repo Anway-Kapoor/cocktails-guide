@@ -15,8 +15,6 @@ export default async function fetchApi(action, query = '') {
       ? `${apiUrl}&query=${encodeURIComponent(query)}`
       : apiUrl;
     
-    console.log("Fetching from:", urlWithQuery);
-    
     const response = await fetch(urlWithQuery, {
       cache: 'no-store',
     });

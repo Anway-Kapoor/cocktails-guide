@@ -8,11 +8,12 @@ import AlphabetPagination from "@/components/AlphabetPagination";
 import Pagination from "@/components/Pagination";
 import { searchCocktails, getCocktailsByLetter } from "@/services/cocktailService";
 
-// Create a wrapper component that uses searchParams
+
 function HomeContent() {
   const searchParams = useSearchParams();
   const urlSearchQuery = searchParams.get('search');
   
+  // Remove isNavigatingBack state and related useEffect
   const [cocktails, setCocktails] = useState([]);
   const [loading, setLoading] = useState(false);
   const [currentLetter, setCurrentLetter] = useState('a');
@@ -48,8 +49,6 @@ function HomeContent() {
       const results = await getCocktailsByLetter(letter);
       setCocktails(results || []);
       setCurrentPage(1);
-      // Remove this line since we're already setting it in handleLetterSelect
-      // setCurrentLetter(letter);
       setIsSearchMode(false);
       setSearchQuery('');
     } catch (error) {
@@ -89,12 +88,43 @@ function HomeContent() {
   
   // Initial load and URL search parameter handling
   useEffect(() => {
-    if (urlSearchQuery) {
-      handleSearch(urlSearchQuery);
-    } else {
-      loadCocktailsByLetter(currentLetter);
-    }
-  }, [urlSearchQuery]); 
+    const handleInitialLoad = async () => {
+      const currentSearchQuery = searchParams.get('search');
+      const letterParam = searchParams.get('letter');
+      
+      setLoading(true);
+      
+      try {
+        if (currentSearchQuery) {
+          setIsSearchMode(true);
+          setSearchQuery(currentSearchQuery);
+          
+          const results = await searchCocktails(currentSearchQuery);
+          setCocktails(results || []);
+          setCurrentPage(1);
+          localStorage.setItem('lastSearch', currentSearchQuery);
+        } else if (letterParam) {
+          setCurrentLetter(letterParam);
+          const results = await getCocktailsByLetter(letterParam);
+          setCocktails(results || []);
+          setCurrentPage(1);
+          setIsSearchMode(false);
+          setSearchQuery('');
+        } else {
+          const results = await getCocktailsByLetter(currentLetter);
+          setCocktails(results || []);
+          setIsSearchMode(false);
+          setSearchQuery('');
+        }
+      } catch (error) {
+        setCocktails([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    handleInitialLoad();
+  }, [searchParams]);
   
   // Improve mobile layout with better spacing and responsive elements
   return (
